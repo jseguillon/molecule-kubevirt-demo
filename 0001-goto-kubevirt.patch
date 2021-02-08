@@ -1,0 +1,48 @@
+From 9915740f74b3928a5df44b6934c2441b482d787f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jo=C3=ABl=20S=C3=A9guillon?= <joel.seguillon@gmail.com>
+Date: Mon, 8 Feb 2021 21:53:11 +0100
+Subject: [PATCH] goto kubevirt
+
+---
+ molecule/default/converge.yml |  1 +
+ molecule/default/molecule.yml | 11 ++++-------
+ 2 files changed, 5 insertions(+), 7 deletions(-)
+
+diff --git a/molecule/default/converge.yml b/molecule/default/converge.yml
+index ee65197..54bc65f 100644
+--- a/molecule/default/converge.yml
++++ b/molecule/default/converge.yml
+@@ -1,6 +1,7 @@
+ ---
+ - name: Converge
+   hosts: all
++  become: yes
+ 
+   vars:
+     nginx_use_ppa: true
+diff --git a/molecule/default/molecule.yml b/molecule/default/molecule.yml
+index 7490710..253fb4f 100644
+--- a/molecule/default/molecule.yml
++++ b/molecule/default/molecule.yml
+@@ -2,15 +2,12 @@
+ dependency:
+   name: galaxy
+ driver:
+-  name: docker
++  name: kubevirt
+ platforms:
+   - name: instance
+-    image: "geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest"
+-    command: ${MOLECULE_DOCKER_COMMAND:-""}
+-    volumes:
+-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+-    privileged: true
+-    pre_build_image: true
++    image: "${MOLECULE_DISTRO:-quay.io/jseguillon/kubevirt-images:centos-7-x86_64-genericcloud-2009}"
++    
++
+ provisioner:
+   name: ansible
+   playbooks:
+-- 
+2.17.1
